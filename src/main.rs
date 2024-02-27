@@ -4,6 +4,24 @@ use serenity::async_trait;
 use serenity::model::channel::Message;
 use serenity::model::gateway::Ready;
 use serenity::prelude::*;
+use reqwest::Error;
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize)]
+struct GptRequest {
+    prompt: String,
+    max_tokens: u32,
+}
+
+#[derive(Deserialize)]
+struct GptResponse {
+    choices: Vec<Choice>,
+}
+
+#[derive(Deserialize)]
+struct Choice {
+    text: String,
+}
 
 const HELP_MESSAGE: &str = "
 Hello there, Human!
@@ -27,6 +45,7 @@ I hope that resolves your issue!
 const HELP_COMMAND: &str = "!help";
 
 struct Handler;
+
 
 #[async_trait]
 impl EventHandler for Handler {
